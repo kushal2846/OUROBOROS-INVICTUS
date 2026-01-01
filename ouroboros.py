@@ -317,7 +317,7 @@ try:
             def set_p(t): st.session_state.prompt = t
             
             if st.button("Simulate Snake 🐍", use_container_width=True):
-                set_p("Write a self-playing Snake simulation (500 steps) with score tracking. Use random moves.")
+                set_p("Write a non-interactive Snake Game simulation using Matplotlib to visualize the path. Save the final frame as 'snake_game.png'.")
                 st.rerun()
             if st.button("Draw 3D Spiral 🌀", use_container_width=True):
                 set_p("Import matplotlib. Generate a complex 3D spiral using ax.scatter() with a cool colormap. Save as plot.png.")

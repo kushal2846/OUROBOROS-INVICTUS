@@ -1,5 +1,11 @@
-streamlit>=1.30.0
-google-generativeai>=0.3.0
-watchdog
+streamlit
 streamlit-antd-components
+google-genai
+google-generativeai
 matplotlib
+numpy
+qrcode
+pypng
+opencv-python-headless
+pillow
+watchdog
