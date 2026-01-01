@@ -168,6 +168,7 @@ class InvictusEngine:
             "- NUMPY RULE: Verify array shapes. Do NOT use `len()` on scalar numpy types (float64).\n"
             "- DECORATOR RULE: Wrappers MUST accept `*args` and `**kwargs` to avoid TypeError.\n"
             "- OUTPUT RULE: Silent success is failure. PROVE your work by printing the final result or saving a plot.\n"
+            "- ALIAS RULE: Do NOT import 'plt'. Use `import matplotlib.pyplot as plt`. Do NOT import 'cv2' without installing `opencv-python`.\n"
             "- IMPORT RULE: Do NOT import 'shift', 'utils', or other imaginary modules. Only use Standard Library or PyPI packages.\n"
             "- If asking for a game, write a non-interactive simulation (500 steps) and print results.\n"
             "- PRINT ALL OUTPUTS TO STDOUT."
@@ -250,24 +251,42 @@ class InvictusEngine:
                     capture_output=True, text=True, timeout=45, cwd=current_dir
                 )
                 
-                # CHECK FOR MISSING MODULES (PIP)
+                # CHECK FOR MISSING MODULES (PIP & SMART ALIASES)
                 if res.returncode != 0 and "ModuleNotFoundError" in res.stderr:
                     match = re.search(r"No module named '(\w+)'", res.stderr)
                     if match:
                         missing_lib = match.group(1)
-                        status_ph.markdown(render_hud(f"HEALING: INSTALLING {missing_lib.upper()}...", 60 + (attempt*10), "#ef4444"), unsafe_allow_html=True)
+                        status_ph.markdown(render_hud(f"HEALING: DIAGNOSING {missing_lib.upper()}...", 60 + (attempt*10), "#ef4444"), unsafe_allow_html=True)
+                        
+                        # V31 SMART HEALER: Logic for Aliases
+                        if missing_lib == "plt":
+                            # Fix Code directly
+                            status_ph.markdown(render_hud(f"HEALING: REPLACING 'import plt' -> 'import matplotlib.pyplot as plt'...", 70, "#10b981"), unsafe_allow_html=True)
+                            code = code.replace("import plt", "import matplotlib.pyplot as plt")
+                            with open(exec_path, "w", encoding='utf-8') as f: f.write(code)
+                            attempt += 1
+                            continue
+                        
+                        # Map common import names to Pip package names
+                        pip_map = {
+                            "sklearn": "scikit-learn",
+                            "cv2": "opencv-python-headless",
+                            "PIL": "Pillow",
+                            "skimage": "scikit-image"
+                        }
+                        install_name = pip_map.get(missing_lib, missing_lib)
+                        
                         try:
                             # Use --user to avoid permission errors on Cloud
-                            subprocess.check_call([sys.executable, "-m", "pip", "install", "--user", missing_lib])
+                            subprocess.check_call([sys.executable, "-m", "pip", "install", "--user", install_name])
                             attempt += 1
                             continue # RETRY LOOP
                         except Exception as e:
-                            # V29: HALLUCINATION FIREWALL
-                            # If install fails, tell the AI specifically to stop using this lib
+                            # V29: HALLUCINATION FIREWALL -> Refined
                             error_msg = (
-                                f"CRITICAL ERROR: The module '{missing_lib}' DOES NOT EXIST on PyPI.\n"
-                                f"Auto-Install failed. \n"
-                                f"ACTION: You MUST rewrite the code to NOT import '{missing_lib}'. Use standard library alternatives."
+                                f"CRITICAL ERROR: The module '{missing_lib}' (Pip: {install_name}) FAILED to install.\n"
+                                f"It likely does not exist or is incompatible.\n"
+                                f"ACTION: Rewrite code to NOT use '{missing_lib}'."
                             )
                             return {"success": False, "stdout": "", "stderr": error_msg, "code": code}
 

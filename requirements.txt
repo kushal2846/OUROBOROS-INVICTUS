@@ -4,6 +4,10 @@ google-genai
 google-generativeai
 matplotlib
 numpy
+pandas
+scipy
+scikit-learn
+networkx
 qrcode
 pypng
 opencv-python-headless
