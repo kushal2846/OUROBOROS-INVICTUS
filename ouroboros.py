@@ -239,12 +239,22 @@ class InvictusEngine:
         """Self-Healing Execution Loop"""
         clean_artifacts()
         
-        # V35: THE DICTATOR - Pre-Execution Syntax Sanitization
-        # Fixes confusing 'c' vs 'cmap' in scatter plots
-        if "scatter" in code and "c='viridis'" in code:
-             code = code.replace("c='viridis'", "c=range(len(x)), cmap='viridis'")
-        if "scatter" in code and "c='plasma'" in code:
-             code = code.replace("c='plasma'", "c=range(len(x)), cmap='plasma'")
+        # V36: SURGEON - Context-Aware Sanitization
+        lines = code.split('\n')
+        new_lines = []
+        for line in lines:
+            if "scatter" in line:
+                for bad_color in ['viridis', 'plasma', 'inferno', 'magma', 'cividis']:
+                    bad_c = f"c='{bad_color}'"
+                    if bad_c in line:
+                        if "cmap=" in line:
+                            # cmap exists, just clean c
+                            line = line.replace(bad_c, "c=range(50)") 
+                        else:
+                            # Add cmap
+                            line = line.replace(bad_str, f"c=range(100), cmap='{bad_color}'")
+            new_lines.append(line)
+        code = '\n'.join(new_lines)
         
         with open(exec_path, "w", encoding='utf-8') as f: f.write(code)
         
@@ -350,7 +360,7 @@ with st.sidebar:
         st.rerun()
         
     st.markdown("### 🚦 STATUS")
-    st.success("SYSTEM ONLINE (INVICTUS V35 DICTATOR)")
+    st.success("SYSTEM ONLINE (INVICTUS V36 SURGEON)")
 
 try:
     # 1. BUILDER MODE
