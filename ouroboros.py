@@ -170,6 +170,7 @@ class InvictusEngine:
             "- OUTPUT RULE: Silent success is failure. PROVE your work by printing the final result or saving a plot.\n"
             "- ALIAS RULE: Do NOT import 'plt'. Use `import matplotlib.pyplot as plt`. Do NOT import 'cv2' without installing `opencv-python`.\n"
             "- IMPORT RULE: Do NOT import 'shift', 'utils', or other imaginary modules. Only use Standard Library or PyPI packages.\n"
+            "- LOGIC RULE: Ensure coordinate tuples (x,y) are consistent. Do not mix 2D and 3D coordinates.\n"
             "- If asking for a game, write a non-interactive simulation (500 steps) and print results.\n"
             "- PRINT ALL OUTPUTS TO STDOUT."
         )
@@ -203,8 +204,8 @@ class InvictusEngine:
             
             except Exception as e:
                 last_error = str(e)
-                # Cool down to prevent 429s
-                time.sleep(2) 
+                # Cool down to prevent 429s (Reduced for Speed V34)
+                time.sleep(0.5) 
                 continue
         
         # 2. DIAMOND DISCOVERY (Emergency)
@@ -342,7 +343,7 @@ with st.sidebar:
         st.rerun()
         
     st.markdown("### 🚦 STATUS")
-    st.success("SYSTEM ONLINE (INVICTUS V33 LIVE)")
+    st.success("SYSTEM ONLINE (INVICTUS V34 TURBO)")
 
 try:
     # 1. BUILDER MODE
@@ -353,7 +354,7 @@ try:
             def set_p(t): st.session_state.prompt = t
             
             if st.button("Simulate Snake 🐍", use_container_width=True):
-                set_p("Write a Python script to simulate a Snake Game logic (no GUI, no pygame, no curses). Run a simulation of 50 moves. Store the snake's path coordinates in a list. Visualize the final path using 'matplotlib' (scatter plot). Save the plot as 'snake_game.png'. Print 'Game Over - Score: X'.")
+                set_p("Write a Python script to simulate a Snake Game logic (no GUI, no pygame). Run 50 moves on a 20x20 grid. Snake body is a list of (x, y) tuples. Store path. Visualize with Matplotlib (scatter plot). Save as 'snake_game.png'. Print 'Game Over'.")
                 st.rerun()
             if st.button("Draw 3D Spiral 🌀", use_container_width=True):
                 set_p("Write a Python script using 'matplotlib' and 'numpy'. Generate a dataset for a 3D Helix (Spiral). Plot it using `ax.scatter`. Use a 'viridis' colormap. Save the figure as 'spiral_3d.png'. Do NOT use plt.show(). Print 'Spiral Generated'.")
