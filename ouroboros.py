@@ -185,6 +185,11 @@ class InvictusEngine:
 
         # 1. TITANIUM LOOP: Try every model in the cascade
         last_error = ""
+
+        # V30 OMEGA: Force Headless Config in Prompt
+        if "matplotlib" in full_prompt.lower() or "plot" in full_prompt.lower():
+             full_prompt = "You MUST start your code with:\nimport matplotlib\nmatplotlib.use('Agg')\n\n" + full_prompt
+
         for model_name in self.models:
             try:
                 # Update HUD if we are retrying
@@ -329,13 +334,13 @@ try:
             def set_p(t): st.session_state.prompt = t
             
             if st.button("Simulate Snake 🐍", use_container_width=True):
-                set_p("Write a non-interactive Snake Game simulation using Matplotlib to visualize the path. Save the final frame as 'snake_game.png'.")
+                set_p("Write a Python script to simulate a Snake Game logic (no GUI, no pygame, no curses). Run a simulation of 50 moves. Store the snake's path coordinates in a list. Visualize the final path using 'matplotlib' (scatter plot). Save the plot as 'snake_game.png'. Print 'Game Over - Score: X'.")
                 st.rerun()
             if st.button("Draw 3D Spiral 🌀", use_container_width=True):
-                set_p("Import matplotlib. Generate a complex 3D spiral using ax.scatter() with a cool colormap. Save as plot.png.")
+                set_p("Write a Python script using 'matplotlib' and 'numpy'. Generate a dataset for a 3D Helix (Spiral). Plot it using `ax.scatter`. Use a 'viridis' colormap. Save the figure as 'spiral_3d.png'. Do NOT use plt.show(). Print 'Spiral Generated'.")
                 st.rerun()
             if st.button("Generate QR Code 📱", use_container_width=True):
-                set_p("Generate a QR code for 'https://google.com'. Save as my_qr.png. Print 'QR Generated'.")
+                set_p("Write a Python script using the 'qrcode' library. Generate a QR code for the URL 'https://ouroboros.streamlit.app'. Save it as 'my_qr.png'. Print 'QR Code Saved'.")
                 st.rerun()
 
         with c1:
@@ -373,7 +378,7 @@ try:
             ph.markdown(render_hud("INITIATING INVICTUS CORE...", 20), unsafe_allow_html=True)
             
             reflexion_attempts = 0
-            max_reflexion = 3 # V25: Increased Retries
+            max_reflexion = 5 # V30 OMEGA: Max Retries
             last_error_context = err_input if st.session_state.page == 'Code Surgeon' else None
             last_code_attempt = "" # Track code to feed back
             
