@@ -163,7 +163,7 @@ class InvictusEngine:
             "  import matplotlib\n"
             "  matplotlib.use('Agg')\n"
             "  import matplotlib.pyplot as plt\n"
-            "- CRITICAL RULE: For 3D plots, use `ax.scatter(c=array)`. Do NOT use `ax.plot(c=array)`.\n"
+            "- CRITICAL RULE: For 3D plots, use `ax.scatter(x, y, z, c=z, cmap='viridis')`. NEVER use `c='viridis'`.\n"
             "- VISUALS: If creating an image, save it as a PNG file (e.g., 'chart.png'). DO NOT use `plt.show()`.\n"
             "- NUMPY RULE: Verify array shapes. Do NOT use `len()` on scalar numpy types (float64).\n"
             "- DECORATOR RULE: Wrappers MUST accept `*args` and `**kwargs` to avoid TypeError.\n"
@@ -238,6 +238,13 @@ class InvictusEngine:
     def execute_with_healing(self, code, status_ph):
         """Self-Healing Execution Loop"""
         clean_artifacts()
+        
+        # V35: THE DICTATOR - Pre-Execution Syntax Sanitization
+        # Fixes confusing 'c' vs 'cmap' in scatter plots
+        if "scatter" in code and "c='viridis'" in code:
+             code = code.replace("c='viridis'", "c=range(len(x)), cmap='viridis'")
+        if "scatter" in code and "c='plasma'" in code:
+             code = code.replace("c='plasma'", "c=range(len(x)), cmap='plasma'")
         
         with open(exec_path, "w", encoding='utf-8') as f: f.write(code)
         
@@ -343,7 +350,7 @@ with st.sidebar:
         st.rerun()
         
     st.markdown("### 🚦 STATUS")
-    st.success("SYSTEM ONLINE (INVICTUS V34 TURBO)")
+    st.success("SYSTEM ONLINE (INVICTUS V35 DICTATOR)")
 
 try:
     # 1. BUILDER MODE
@@ -357,7 +364,7 @@ try:
                 set_p("Write a Python script to simulate a Snake Game logic (no GUI, no pygame). Run 50 moves on a 20x20 grid. Snake body is a list of (x, y) tuples. Store path. Visualize with Matplotlib (scatter plot). Save as 'snake_game.png'. Print 'Game Over'.")
                 st.rerun()
             if st.button("Draw 3D Spiral 🌀", use_container_width=True):
-                set_p("Write a Python script using 'matplotlib' and 'numpy'. Generate a dataset for a 3D Helix (Spiral). Plot it using `ax.scatter`. Use a 'viridis' colormap. Save the figure as 'spiral_3d.png'. Do NOT use plt.show(). Print 'Spiral Generated'.")
+                set_p("Write a Python script using 'matplotlib' and 'numpy'. Generate a 3D Helix. Plot using EXACTLY: `ax.scatter(x, y, z, c=z, cmap='viridis')`. Save as 'spiral_3d.png'. Print 'Done'.")
                 st.rerun()
             if st.button("Generate QR Code 📱", use_container_width=True):
                 set_p("Write a Python script using the 'qrcode' library. Generate a QR code for the URL 'https://ouroboros.streamlit.app'. Save it as 'my_qr.png'. Print 'QR Code Saved'.")
