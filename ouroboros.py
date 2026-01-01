@@ -168,6 +168,7 @@ class InvictusEngine:
             "- NUMPY RULE: Verify array shapes. Do NOT use `len()` on scalar numpy types (float64).\n"
             "- DECORATOR RULE: Wrappers MUST accept `*args` and `**kwargs` to avoid TypeError.\n"
             "- OUTPUT RULE: Silent success is failure. PROVE your work by printing the final result or saving a plot.\n"
+            "- IMPORT RULE: Do NOT import 'shift', 'utils', or other imaginary modules. Only use Standard Library or PyPI packages.\n"
             "- If asking for a game, write a non-interactive simulation (500 steps) and print results.\n"
             "- PRINT ALL OUTPUTS TO STDOUT."
         )
@@ -256,8 +257,14 @@ class InvictusEngine:
                             attempt += 1
                             continue # RETRY LOOP
                         except Exception as e:
-                            # If install fails, return error immediately
-                            return {"success": False, "stdout": "", "stderr": f"Auto-Install Failed for {missing_lib}: {e}", "code": code}
+                            # V29: HALLUCINATION FIREWALL
+                            # If install fails, tell the AI specifically to stop using this lib
+                            error_msg = (
+                                f"CRITICAL ERROR: The module '{missing_lib}' DOES NOT EXIST on PyPI.\n"
+                                f"Auto-Install failed. \n"
+                                f"ACTION: You MUST rewrite the code to NOT import '{missing_lib}'. Use standard library alternatives."
+                            )
+                            return {"success": False, "stdout": "", "stderr": error_msg, "code": code}
 
                 # CHECK FOR MISSING IMPORTS (STDLIB/Structure)
                 if res.returncode != 0 and "NameError" in res.stderr:
