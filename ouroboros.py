@@ -250,9 +250,14 @@ class InvictusEngine:
                     if match:
                         missing_lib = match.group(1)
                         status_ph.markdown(render_hud(f"HEALING: INSTALLING {missing_lib.upper()}...", 60 + (attempt*10), "#ef4444"), unsafe_allow_html=True)
-                        subprocess.check_call([sys.executable, "-m", "pip", "install", missing_lib])
-                        attempt += 1
-                        continue # RETRY LOOP
+                        try:
+                            # Use --user to avoid permission errors on Cloud
+                            subprocess.check_call([sys.executable, "-m", "pip", "install", "--user", missing_lib])
+                            attempt += 1
+                            continue # RETRY LOOP
+                        except Exception as e:
+                            # If install fails, return error immediately
+                            return {"success": False, "stdout": "", "stderr": f"Auto-Install Failed for {missing_lib}: {e}", "code": code}
 
                 # CHECK FOR MISSING IMPORTS (STDLIB/Structure)
                 if res.returncode != 0 and "NameError" in res.stderr:
@@ -405,6 +410,8 @@ try:
                 else:
                     # Standard Failure
                     last_error_context = res['stderr']
+                    with st.expander("🛑 Error Logs (Debug)", expanded=True):
+                        st.code(res['stderr'], language="text")
                     reflexion_attempts += 1
             
             # 3. VERIFYING
