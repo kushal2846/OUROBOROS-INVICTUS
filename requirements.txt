@@ -1,8 +1,6 @@
 streamlit
 streamlit-antd-components
-google-genai
 google-generativeai
 matplotlib
 numpy
 qrcode
-watchdog
