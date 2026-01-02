@@ -362,7 +362,7 @@ with st.sidebar:
         st.rerun()
         
     st.markdown("### 🚦 STATUS")
-    st.success("SYSTEM ONLINE (INVICTUS V37 GOD MODE)")
+    st.success("SYSTEM ONLINE (INVICTUS V38 STABLE)")
 
 try:
     # 1. BUILDER MODE
@@ -372,11 +372,11 @@ try:
             st.write("### ⚡ Quick Ops")
             def set_p(t): st.session_state.prompt = t
             
-            if st.button("Simulate Snake 🐍", use_container_width=True):
-                set_p("Write a Python script to simulate a Snake Game logic (no GUI, no pygame). Run 50 moves on a 20x20 grid. Snake body is a list of (x, y) tuples. Store path. Visualize with Matplotlib (scatter plot). Save as 'snake_game.png'. Print 'Game Over'.")
+            if st.button("Simulate Snake Path 🐍", use_container_width=True):
+                set_p("Write a Python script to generate a 'Snake-like' random walk. Start at (0,0). Generate 50 steps (up, down, left, righ). Store in lists X and Y. Plot the path using Matplotlib (Blue Line). Mark the 'Head' (last point) with a Red Dot. Save as 'snake_path.png'. Print 'Snake Path Generated'.")
                 st.rerun()
-            if st.button("Draw 3D Spiral 🌀", use_container_width=True):
-                set_p("Write a Python script using 'matplotlib' and 'numpy'. Generate a 3D Helix. Plot using EXACTLY: `ax.scatter(x, y, z, c=z, cmap='viridis')`. Set labels using `ax.set_xlabel`, `ax.set_ylabel`, `ax.set_zlabel`. Save as 'spiral_3d.png'. Print 'Done'.")
+            if st.button("Lorenz Attractor (Chaos) 🦋", use_container_width=True):
+                set_p("Write a Python script to simulate the Lorenz Attractor (Chaos Theory). Use constants sigma=10, rho=28, beta=8/3. Simulate 10000 steps. Plot the 3D trajectory using `ax.plot(x, y, z, lw=0.5)`. Save as 'lorenz_chaos.png'. Print 'Chaos Theory Generated'.")
                 st.rerun()
             if st.button("Generate QR Code 📱", use_container_width=True):
                 set_p("Write a Python script using the 'qrcode' library. Generate a QR code for the URL 'https://ouroboros.streamlit.app'. Save it as 'my_qr.png'. Print 'QR Code Saved'.")
