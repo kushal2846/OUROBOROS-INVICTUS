@@ -171,6 +171,8 @@ class InvictusEngine:
             "- ALIAS RULE: Do NOT import 'plt'. Use `import matplotlib.pyplot as plt`. Do NOT import 'cv2' without installing `opencv-python`.\n"
             "- IMPORT RULE: Do NOT import 'shift', 'utils', or other imaginary modules. Only use Standard Library or PyPI packages.\n"
             "- LOGIC RULE: Ensure coordinate tuples (x,y) are consistent. Do not mix 2D and 3D coordinates.\n"
+            "- 3D PLOT RULE: Use `ax.set_zlabel('Z')`, NOT `plt.zlabel('Z')`.\n"
+            "- SYNTAX RULE: Double-check all f-strings and brackets are closed. Avoid syntax errors.\n"
             "- If asking for a game, write a non-interactive simulation (500 steps) and print results.\n"
             "- PRINT ALL OUTPUTS TO STDOUT."
         )
@@ -360,7 +362,7 @@ with st.sidebar:
         st.rerun()
         
     st.markdown("### 🚦 STATUS")
-    st.success("SYSTEM ONLINE (INVICTUS V36 SURGEON)")
+    st.success("SYSTEM ONLINE (INVICTUS V37 GOD MODE)")
 
 try:
     # 1. BUILDER MODE
@@ -374,7 +376,7 @@ try:
                 set_p("Write a Python script to simulate a Snake Game logic (no GUI, no pygame). Run 50 moves on a 20x20 grid. Snake body is a list of (x, y) tuples. Store path. Visualize with Matplotlib (scatter plot). Save as 'snake_game.png'. Print 'Game Over'.")
                 st.rerun()
             if st.button("Draw 3D Spiral 🌀", use_container_width=True):
-                set_p("Write a Python script using 'matplotlib' and 'numpy'. Generate a 3D Helix. Plot using EXACTLY: `ax.scatter(x, y, z, c=z, cmap='viridis')`. Save as 'spiral_3d.png'. Print 'Done'.")
+                set_p("Write a Python script using 'matplotlib' and 'numpy'. Generate a 3D Helix. Plot using EXACTLY: `ax.scatter(x, y, z, c=z, cmap='viridis')`. Set labels using `ax.set_xlabel`, `ax.set_ylabel`, `ax.set_zlabel`. Save as 'spiral_3d.png'. Print 'Done'.")
                 st.rerun()
             if st.button("Generate QR Code 📱", use_container_width=True):
                 set_p("Write a Python script using the 'qrcode' library. Generate a QR code for the URL 'https://ouroboros.streamlit.app'. Save it as 'my_qr.png'. Print 'QR Code Saved'.")
@@ -423,12 +425,15 @@ try:
                 # GENERATE
                 if reflexion_attempts > 0:
                      ph.markdown(render_hud(f"🧠 REFLEXION ({reflexion_attempts}/{max_reflexion}): FIXING LOGIC...", 40, "#ec4899"), unsafe_allow_html=True)
-                     # V25 RECURSIVE REPAIR: Feed the BROKEN CODE back to the AI
-                     # "Here is the code you wrote, it failed with this error. Fix it."
+                     # V37 GOD MODE: Aggressive Debugging Prompt
                      current_prompt = (
                          f"You wrote this code:\n{last_code_attempt}\n\n"
-                         f"It failed with this error:\n{last_error_context}\n\n"
-                         f"FIX THE CODE."
+                         f"EXECUTION ERROR:\n{last_error_context}\n\n"
+                         f"CRITICAL FIX INSTRUCTIONS:\n"
+                         f"1. Analyze the error trace above. Which line failed?\n"
+                         f"2. Fix that specific logic. (e.g., if 'AttributeError: plt.zlabel', change to 'ax.set_zlabel').\n"
+                         f"3. If 'SyntaxError', close your brackets/quotes.\n"
+                         f"4. RETURN THE FIXED, COMPLETE CODE."
                      )
                      mode = "surgeon" 
                 else:
