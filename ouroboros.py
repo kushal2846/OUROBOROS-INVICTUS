@@ -171,8 +171,8 @@ class InvictusEngine:
             "- ALIAS RULE: Do NOT import 'plt'. Use `import matplotlib.pyplot as plt`. Do NOT import 'cv2' without installing `opencv-python`.\n"
             "- IMPORT RULE: Do NOT import 'shift', 'utils', or other imaginary modules. Only use Standard Library or PyPI packages.\n"
             "- LOGIC RULE: Ensure coordinate tuples (x,y) are consistent. Do not mix 2D and 3D coordinates.\n"
-            "- 3D PLOT RULE: Use `ax.set_zlabel('Z')`, NOT `plt.zlabel('Z')`.\n"
-            "- SYNTAX RULE: Double-check all f-strings and brackets are closed. Avoid syntax errors.\n"
+            "- 3D PLOT RULE: ALWAYS initialize with `ax = fig.add_subplot(111, projection='3d')`. Use `ax.set_zlabel('Z')`.\n"
+            "- IMAGE RULE: For `imshow`, inputs MUST be 2D (H, W) or 3D (H, W, 3). If array is flat, use `.reshape(H, W)`.\n"
             "- HEADLESS RULE: Server has NO MONITOR. `cv2.imshow`, `plt.show`, `pygame.display` are BANNED. Save content to files (e.g., 'out.png').\n"
             "- If asking for a game, write a non-interactive simulation (500 steps) and print results.\n"
             "- PRINT ALL OUTPUTS TO STDOUT."
@@ -363,7 +363,7 @@ with st.sidebar:
         st.rerun()
         
     st.markdown("### 🚦 STATUS")
-    st.success("SYSTEM ONLINE (INVICTUS V39 ADVANCED)")
+    st.success("SYSTEM ONLINE (INVICTUS V40 GRANDMASTER)")
 
 try:
     # 1. BUILDER MODE
@@ -374,10 +374,10 @@ try:
             def set_p(t): st.session_state.prompt = t
             
             if st.button("Simulate Snake Path 🐍", use_container_width=True):
-                set_p("Write a Python script to generate a 'Snake-like' random walk. Start at (0,0). Generate 50 steps (up, down, left, righ). Store in lists X and Y. Plot the path using Matplotlib (Blue Line). Mark the 'Head' (last point) with a Red Dot. Save as 'snake_path.png'. Print 'Snake Path Generated'.")
+                set_p("Write a Python script to generate a 'Snake-like' random walk. Start at (0,0). Generate 50 coordinates. Store as list of tuples. Plot the path using Matplotlib (Blue Line) on a 2D grid. Mark Start(Green) and End(Red). Save as 'snake_path.png'. Print 'Path Generated'.")
                 st.rerun()
             if st.button("Lorenz Attractor (Chaos) 🦋", use_container_width=True):
-                set_p("Write a Python script to simulate the Lorenz Attractor (Chaos Theory). Use constants sigma=10, rho=28, beta=8/3. Simulate 10000 steps. Plot the 3D trajectory using `ax.plot(x, y, z, lw=0.5)`. Save as 'lorenz_chaos.png'. Print 'Chaos Theory Generated'.")
+                set_p("Write a Python script for Lorenz Attractor. Constants: sigma=10, rho=28, beta=8/3. Steps: 10000. INIT 3D AXES: `fig = plt.figure(); ax = fig.add_subplot(111, projection='3d')`. Plot trajectory `ax.plot(x, y, z, lw=0.5)`. Save as 'lorenz_chaos.png'. Print 'Chaos Done'.")
                 st.rerun()
             if st.button("Generate QR Code 📱", use_container_width=True):
                 set_p("Write a Python script using the 'qrcode' library. Generate a QR code for the URL 'https://ouroboros.streamlit.app'. Save it as 'my_qr.png'. Print 'QR Code Saved'.")
@@ -432,9 +432,10 @@ try:
                          f"EXECUTION ERROR:\n{last_error_context}\n\n"
                          f"CRITICAL FIX INSTRUCTIONS:\n"
                          f"1. Analyze the error trace above. Which line failed?\n"
-                         f"2. Fix that specific logic. (e.g., if 'AttributeError: plt.zlabel', change to 'ax.set_zlabel').\n"
-                         f"3. If 'SyntaxError', close your brackets/quotes.\n"
-                         f"4. RETURN THE FIXED, COMPLETE CODE."
+                         f"2. If 'Invalid shape', you MUST reshape your array before plotting (e.g., array.reshape(H,W)).\n"
+                         f"3. If 'no attribute zlabel', ensure you used `ax = fig.add_subplot(projection='3d')`.\n"
+                         f"4. Correct consistency errors. Close all syntax.\n"
+                         f"5. RETURN THE FIXED, COMPLETE CODE."
                      )
                      mode = "surgeon" 
                 else:
