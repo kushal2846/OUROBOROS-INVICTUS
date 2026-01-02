@@ -171,10 +171,10 @@ class InvictusEngine:
             "- ALIAS RULE: Do NOT import 'plt'. Use `import matplotlib.pyplot as plt`. Do NOT import 'cv2' without installing `opencv-python`.\n"
             "- IMPORT RULE: Do NOT import 'shift', 'utils', or other imaginary modules. Only use Standard Library or PyPI packages.\n"
             "- LOGIC RULE: Ensure coordinate tuples (x,y) are consistent. Do not mix 2D and 3D coordinates.\n"
-            "- 3D PLOT RULE: ALWAYS initialize with `ax = fig.add_subplot(111, projection='3d')`. Use `ax.set_zlabel('Z')`.\n"
+            "- 3D PLOT RULE: IF AND ONLY IF plotting 3D, use `ax = fig.add_subplot(111, projection='3d')`.\n"
             "- IMAGE RULE: For `imshow`, inputs MUST be 2D (H, W) or 3D (H, W, 3). If array is flat, use `.reshape(H, W)`.\n"
             "- HEADLESS RULE: Server has NO MONITOR. `plt.show` is BANNED. Use `plt.savefig()`.\n"
-            "- LIBRARY RULE: Do NOT use `cv2` (OpenCV). Use `PIL` (Pillow) for all image processing to avoid system crashes.\n"
+            "- LIBRARY RULE: Do NOT use `cv2`. Use `PIL` (Pillow) or `scikit-image` for image processing.\n"
             "- If asking for a game, write a non-interactive simulation (500 steps) and print results.\n"
             "- PRINT ALL OUTPUTS TO STDOUT."
         )
@@ -364,7 +364,7 @@ with st.sidebar:
         st.rerun()
         
     st.markdown("### 🚦 STATUS")
-    st.success("SYSTEM ONLINE (INVICTUS V41 RESCUE)")
+    st.success("SYSTEM ONLINE (INVICTUS V42 FINAL)")
 
 try:
     # 1. BUILDER MODE
@@ -375,10 +375,47 @@ try:
             def set_p(t): st.session_state.prompt = t
             
             if st.button("Simulate Snake Path 🐍", use_container_width=True):
-                set_p("Write a Python script to generate a 'Snake-like' random walk. Start at (0,0). Generate 50 coordinates. Store as list of tuples. Plot the path using Matplotlib (Blue Line) on a 2D grid. Mark Start(Green) and End(Red). Save as 'snake_path.png'. Print 'Path Generated'.")
+                code_snake = (
+                    "import matplotlib.pyplot as plt\n"
+                    "import numpy as np\n"
+                    "import random\n"
+                    "# Golden Source Snake Path\n"
+                    "x, y = [0], [0]\n"
+                    "for _ in range(50):\n"
+                    "    dx, dy = random.choice([(0,1), (0,-1), (1,0), (-1,0)])\n"
+                    "    x.append(x[-1] + dx)\n"
+                    "    y.append(y[-1] + dy)\n"
+                    "plt.figure(figsize=(6,6))\n"
+                    "plt.plot(x, y, label='Snake Path', linewidth=2)\n"
+                    "plt.scatter(x[-1], y[-1], c='red', s=100, zorder=5, label='Head')\n"
+                    "plt.title('Snake Random Walk')\n"
+                    "plt.grid(True)\n"
+                    "plt.legend()\n"
+                    "plt.savefig('snake_final.png')\n"
+                    "print('Snake Path Generated Successfully.')"
+                )
+                set_p(f"Execute this EXACT Python code for the Snake simulation:\n```python\n{code_snake}\n```")
                 st.rerun()
+
             if st.button("Lorenz Attractor (Chaos) 🦋", use_container_width=True):
-                set_p("Write a Python script for Lorenz Attractor. Constants: sigma=10, rho=28, beta=8/3. Steps: 10000. INIT 3D AXES: `fig = plt.figure(); ax = fig.add_subplot(111, projection='3d')`. Plot trajectory `ax.plot(x, y, z, lw=0.5)`. Save as 'lorenz_chaos.png'. Print 'Chaos Done'.")
+                code_lorenz = (
+                    "import numpy as np\n"
+                    "import matplotlib.pyplot as plt\n"
+                    "from scipy.integrate import odeint\n"
+                    "def lorenz(state, t, sigma=10, rho=28, beta=8/3):\n"
+                    "    x, y, z = state\n"
+                    "    return sigma * (y - x), x * (rho - z) - y, x * y - beta * z\n"
+                    "state0 = [1.0, 1.0, 1.0]\n"
+                    "t = np.arange(0.0, 40.0, 0.01)\n"
+                    "states = odeint(lorenz, state0, t)\n"
+                    "fig = plt.figure()\n"
+                    "ax = fig.add_subplot(111, projection='3d')\n"
+                    "ax.plot(states[:, 0], states[:, 1], states[:, 2])\n"
+                    "ax.set_title('Lorenz Attractor')\n"
+                    "plt.savefig('lorenz_final.png')\n"
+                    "print('Chaos Theory Visualized.')"
+                )
+                set_p(f"Execute this EXACT Python code for Lorenz Attractor:\n```python\n{code_lorenz}\n```")
                 st.rerun()
             if st.button("Generate QR Code 📱", use_container_width=True):
                 set_p("Write a Python script using the 'qrcode' library. Generate a QR code for the URL 'https://ouroboros.streamlit.app'. Save it as 'my_qr.png'. Print 'QR Code Saved'.")
