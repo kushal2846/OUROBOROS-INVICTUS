@@ -364,7 +364,7 @@ with st.sidebar:
         st.rerun()
         
     st.markdown("### 🚦 STATUS")
-    st.success("SYSTEM ONLINE (INVICTUS V44 ARSENAL)")
+    st.success("SYSTEM ONLINE (INVICTUS V46 FINAL)")
 
 try:
     # 1. BUILDER MODE
