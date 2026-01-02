@@ -173,6 +173,7 @@ class InvictusEngine:
             "- LOGIC RULE: Ensure coordinate tuples (x,y) are consistent. Do not mix 2D and 3D coordinates.\n"
             "- 3D PLOT RULE: Use `ax.set_zlabel('Z')`, NOT `plt.zlabel('Z')`.\n"
             "- SYNTAX RULE: Double-check all f-strings and brackets are closed. Avoid syntax errors.\n"
+            "- HEADLESS RULE: Server has NO MONITOR. `cv2.imshow`, `plt.show`, `pygame.display` are BANNED. Save content to files (e.g., 'out.png').\n"
             "- If asking for a game, write a non-interactive simulation (500 steps) and print results.\n"
             "- PRINT ALL OUTPUTS TO STDOUT."
         )
@@ -362,7 +363,7 @@ with st.sidebar:
         st.rerun()
         
     st.markdown("### 🚦 STATUS")
-    st.success("SYSTEM ONLINE (INVICTUS V38 STABLE)")
+    st.success("SYSTEM ONLINE (INVICTUS V39 ADVANCED)")
 
 try:
     # 1. BUILDER MODE
