@@ -2,6 +2,8 @@
 
 **The Unconquered AI Coding Engine.**
 
+[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white_red.svg)](https://ouroboros-invictus-rt9dewshvgzvadam7qmxrm.streamlit.app/)
+
 > *"It swallows its own tail to heal itself."*
 
 Ouroboros Invictus is a self-correcting, multi-model AI coding environment designed to build, fix, and execute Python code in real-time. It features a military-grade fallback system that ensures functionality even when primary AI APIs fail.
